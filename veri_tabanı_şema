@@ -1,0 +1,1116 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.4
+-- Dumped by pg_dump version 17.4
+
+-- Started on 2025-07-09 16:07:46
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 248 (class 1255 OID 58890)
+-- Name: get_player_tournaments(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_player_tournaments(player_id integer) RETURNS TABLE(tournament_name character varying, start_date date)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT t.name, t.start_date
+    FROM public.tournaments t
+    JOIN public.registrations r ON t.tournament_id = r.tournament_id
+    WHERE r.player_id = get_player_tournaments.player_id;
+END;
+$$;
+
+
+ALTER FUNCTION public.get_player_tournaments(player_id integer) OWNER TO postgres;
+
+--
+-- TOC entry 247 (class 1255 OID 58889)
+-- Name: get_tournament_details(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_tournament_details(tournament_id integer) RETURNS TABLE(tournament_name character varying, game_type character varying, prize integer)
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY
+    SELECT name, game, prize
+    FROM public.tournaments
+    WHERE tournament_id = get_tournament_details.tournament_id;
+END;
+$$;
+
+
+ALTER FUNCTION public.get_tournament_details(tournament_id integer) OWNER TO postgres;
+
+--
+-- TOC entry 249 (class 1255 OID 58891)
+-- Name: log_new_player(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.log_new_player() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    INSERT INTO public.action_logs (action_type, description)
+    VALUES ('Player Added', 'A new player with username ' || NEW.username || ' has been added');
+    RETURN NEW;
+END;
+$$;
+
+
+ALTER FUNCTION public.log_new_player() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 230 (class 1259 OID 58922)
+-- Name: action_logs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.action_logs (
+    log_id integer NOT NULL,
+    action_type character varying(255),
+    description text,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.action_logs OWNER TO postgres;
+
+--
+-- TOC entry 229 (class 1259 OID 58921)
+-- Name: action_logs_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.action_logs_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.action_logs_log_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4940 (class 0 OID 0)
+-- Dependencies: 229
+-- Name: action_logs_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.action_logs_log_id_seq OWNED BY public.action_logs.log_id;
+
+
+--
+-- TOC entry 232 (class 1259 OID 58933)
+-- Name: brackets; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.brackets (
+    bracket_id integer NOT NULL,
+    tournament_id integer,
+    match_id integer,
+    round_number integer,
+    parent_match_id integer
+);
+
+
+ALTER TABLE public.brackets OWNER TO postgres;
+
+--
+-- TOC entry 231 (class 1259 OID 58932)
+-- Name: brackets_bracket_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.brackets_bracket_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.brackets_bracket_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4941 (class 0 OID 0)
+-- Dependencies: 231
+-- Name: brackets_bracket_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.brackets_bracket_id_seq OWNED BY public.brackets.bracket_id;
+
+
+--
+-- TOC entry 238 (class 1259 OID 81928)
+-- Name: content; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.content (
+    id integer NOT NULL,
+    title character varying(255) NOT NULL,
+    category character varying(100),
+    status character varying(50),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.content OWNER TO postgres;
+
+--
+-- TOC entry 237 (class 1259 OID 81927)
+-- Name: content_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.content_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.content_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4942 (class 0 OID 0)
+-- Dependencies: 237
+-- Name: content_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.content_id_seq OWNED BY public.content.id;
+
+
+--
+-- TOC entry 246 (class 1259 OID 122881)
+-- Name: games; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.games (
+    game_id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    image_url character varying(255)
+);
+
+
+ALTER TABLE public.games OWNER TO postgres;
+
+--
+-- TOC entry 245 (class 1259 OID 122880)
+-- Name: games_game_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.games_game_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.games_game_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4943 (class 0 OID 0)
+-- Dependencies: 245
+-- Name: games_game_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.games_game_id_seq OWNED BY public.games.game_id;
+
+
+--
+-- TOC entry 240 (class 1259 OID 90168)
+-- Name: match_results; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.match_results (
+    match_id integer NOT NULL,
+    tournament_id integer NOT NULL,
+    score1 integer NOT NULL,
+    score2 integer NOT NULL,
+    objection_reason text,
+    admin_approved boolean DEFAULT false,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    is_approved boolean DEFAULT false,
+    team1_name character varying(255),
+    team2_name character varying(255)
+);
+
+
+ALTER TABLE public.match_results OWNER TO postgres;
+
+--
+-- TOC entry 239 (class 1259 OID 90167)
+-- Name: match_results_match_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.match_results_match_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.match_results_match_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4944 (class 0 OID 0)
+-- Dependencies: 239
+-- Name: match_results_match_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.match_results_match_id_seq OWNED BY public.match_results.match_id;
+
+
+--
+-- TOC entry 222 (class 1259 OID 58843)
+-- Name: matches; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.matches (
+    match_id integer NOT NULL,
+    tournament_id integer NOT NULL,
+    team1_id integer NOT NULL,
+    team2_id integer NOT NULL,
+    score_team1 integer DEFAULT 0,
+    score_team2 integer DEFAULT 0,
+    match_date date,
+    round_number integer,
+    status character varying(50),
+    team1_score integer,
+    team2_score integer
+);
+
+
+ALTER TABLE public.matches OWNER TO postgres;
+
+--
+-- TOC entry 221 (class 1259 OID 58842)
+-- Name: matches_match_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.matches_match_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.matches_match_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4945 (class 0 OID 0)
+-- Dependencies: 221
+-- Name: matches_match_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.matches_match_id_seq OWNED BY public.matches.match_id;
+
+
+--
+-- TOC entry 218 (class 1259 OID 58827)
+-- Name: players; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.players (
+    player_id integer NOT NULL,
+    username character varying(100) NOT NULL,
+    email character varying(100) NOT NULL,
+    age integer,
+    team_id integer,
+    favorite_game character varying(50),
+    name character varying(255),
+    password character varying(255),
+    is_admin boolean DEFAULT false,
+    role character varying(50) DEFAULT 'player'::character varying,
+    id integer NOT NULL,
+    puan integer
+);
+
+
+ALTER TABLE public.players OWNER TO postgres;
+
+--
+-- TOC entry 234 (class 1259 OID 59015)
+-- Name: players_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.players_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.players_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4946 (class 0 OID 0)
+-- Dependencies: 234
+-- Name: players_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.players_id_seq OWNED BY public.players.id;
+
+
+--
+-- TOC entry 217 (class 1259 OID 58826)
+-- Name: players_player_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.players_player_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.players_player_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4947 (class 0 OID 0)
+-- Dependencies: 217
+-- Name: players_player_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.players_player_id_seq OWNED BY public.players.player_id;
+
+
+--
+-- TOC entry 224 (class 1259 OID 58852)
+-- Name: registrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.registrations (
+    registration_id integer NOT NULL,
+    player_id integer,
+    team_id integer,
+    tournament_id integer NOT NULL,
+    registered_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+ALTER TABLE public.registrations OWNER TO postgres;
+
+--
+-- TOC entry 223 (class 1259 OID 58851)
+-- Name: registrations_registration_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.registrations_registration_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.registrations_registration_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4948 (class 0 OID 0)
+-- Dependencies: 223
+-- Name: registrations_registration_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.registrations_registration_id_seq OWNED BY public.registrations.registration_id;
+
+
+--
+-- TOC entry 244 (class 1259 OID 114698)
+-- Name: reward_requests; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.reward_requests (
+    request_id integer NOT NULL,
+    player_id integer,
+    reward_id integer,
+    request_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    approved boolean DEFAULT false
+);
+
+
+ALTER TABLE public.reward_requests OWNER TO postgres;
+
+--
+-- TOC entry 243 (class 1259 OID 114697)
+-- Name: reward_requests_request_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.reward_requests_request_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.reward_requests_request_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4949 (class 0 OID 0)
+-- Dependencies: 243
+-- Name: reward_requests_request_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.reward_requests_request_id_seq OWNED BY public.reward_requests.request_id;
+
+
+--
+-- TOC entry 242 (class 1259 OID 114689)
+-- Name: rewards; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.rewards (
+    reward_id integer NOT NULL,
+    name character varying(100),
+    description text,
+    price integer
+);
+
+
+ALTER TABLE public.rewards OWNER TO postgres;
+
+--
+-- TOC entry 241 (class 1259 OID 114688)
+-- Name: rewards_reward_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.rewards_reward_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.rewards_reward_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4950 (class 0 OID 0)
+-- Dependencies: 241
+-- Name: rewards_reward_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.rewards_reward_id_seq OWNED BY public.rewards.reward_id;
+
+
+--
+-- TOC entry 236 (class 1259 OID 65556)
+-- Name: team_players; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.team_players (
+    team_id integer NOT NULL,
+    player_id integer NOT NULL
+);
+
+
+ALTER TABLE public.team_players OWNER TO postgres;
+
+--
+-- TOC entry 228 (class 1259 OID 58905)
+-- Name: teams; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.teams (
+    team_id integer NOT NULL,
+    team_name character varying(100) DEFAULT 'Unnamed Team'::character varying NOT NULL,
+    country character varying(50),
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    creator_id integer,
+    player_id integer,
+    name character varying(255),
+    id integer NOT NULL,
+    status character varying(20) DEFAULT 'pending'::character varying
+);
+
+
+ALTER TABLE public.teams OWNER TO postgres;
+
+--
+-- TOC entry 235 (class 1259 OID 65547)
+-- Name: teams_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.teams_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.teams_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4951 (class 0 OID 0)
+-- Dependencies: 235
+-- Name: teams_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.teams_id_seq OWNED BY public.teams.id;
+
+
+--
+-- TOC entry 227 (class 1259 OID 58904)
+-- Name: teams_team_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.teams_team_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.teams_team_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4952 (class 0 OID 0)
+-- Dependencies: 227
+-- Name: teams_team_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.teams_team_id_seq OWNED BY public.teams.team_id;
+
+
+--
+-- TOC entry 220 (class 1259 OID 58836)
+-- Name: tournaments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tournaments (
+    tournament_id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    game character varying(50),
+    prize character varying(255),
+    max_teams integer,
+    start_date date,
+    id integer NOT NULL,
+    tournament_name character varying(255),
+    game_id integer
+);
+
+
+ALTER TABLE public.tournaments OWNER TO postgres;
+
+--
+-- TOC entry 233 (class 1259 OID 58968)
+-- Name: tournaments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tournaments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tournaments_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4953 (class 0 OID 0)
+-- Dependencies: 233
+-- Name: tournaments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tournaments_id_seq OWNED BY public.tournaments.id;
+
+
+--
+-- TOC entry 219 (class 1259 OID 58835)
+-- Name: tournaments_tournament_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tournaments_tournament_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.tournaments_tournament_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4954 (class 0 OID 0)
+-- Dependencies: 219
+-- Name: tournaments_tournament_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tournaments_tournament_id_seq OWNED BY public.tournaments.tournament_id;
+
+
+--
+-- TOC entry 226 (class 1259 OID 58894)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    username character varying(50) NOT NULL,
+    password character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 225 (class 1259 OID 58893)
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.users_user_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 4955 (class 0 OID 0)
+-- Dependencies: 225
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- TOC entry 4728 (class 2604 OID 58925)
+-- Name: action_logs log_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.action_logs ALTER COLUMN log_id SET DEFAULT nextval('public.action_logs_log_id_seq'::regclass);
+
+
+--
+-- TOC entry 4730 (class 2604 OID 58936)
+-- Name: brackets bracket_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brackets ALTER COLUMN bracket_id SET DEFAULT nextval('public.brackets_bracket_id_seq'::regclass);
+
+
+--
+-- TOC entry 4731 (class 2604 OID 81931)
+-- Name: content id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.content ALTER COLUMN id SET DEFAULT nextval('public.content_id_seq'::regclass);
+
+
+--
+-- TOC entry 4741 (class 2604 OID 122884)
+-- Name: games game_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.games ALTER COLUMN game_id SET DEFAULT nextval('public.games_game_id_seq'::regclass);
+
+
+--
+-- TOC entry 4733 (class 2604 OID 90171)
+-- Name: match_results match_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.match_results ALTER COLUMN match_id SET DEFAULT nextval('public.match_results_match_id_seq'::regclass);
+
+
+--
+-- TOC entry 4717 (class 2604 OID 58846)
+-- Name: matches match_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.matches ALTER COLUMN match_id SET DEFAULT nextval('public.matches_match_id_seq'::regclass);
+
+
+--
+-- TOC entry 4711 (class 2604 OID 58830)
+-- Name: players player_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players ALTER COLUMN player_id SET DEFAULT nextval('public.players_player_id_seq'::regclass);
+
+
+--
+-- TOC entry 4714 (class 2604 OID 59016)
+-- Name: players id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players ALTER COLUMN id SET DEFAULT nextval('public.players_id_seq'::regclass);
+
+
+--
+-- TOC entry 4720 (class 2604 OID 58855)
+-- Name: registrations registration_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registrations ALTER COLUMN registration_id SET DEFAULT nextval('public.registrations_registration_id_seq'::regclass);
+
+
+--
+-- TOC entry 4738 (class 2604 OID 114701)
+-- Name: reward_requests request_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reward_requests ALTER COLUMN request_id SET DEFAULT nextval('public.reward_requests_request_id_seq'::regclass);
+
+
+--
+-- TOC entry 4737 (class 2604 OID 114692)
+-- Name: rewards reward_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rewards ALTER COLUMN reward_id SET DEFAULT nextval('public.rewards_reward_id_seq'::regclass);
+
+
+--
+-- TOC entry 4723 (class 2604 OID 65544)
+-- Name: teams team_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams ALTER COLUMN team_id SET DEFAULT nextval('public.teams_team_id_seq'::regclass);
+
+
+--
+-- TOC entry 4726 (class 2604 OID 65548)
+-- Name: teams id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams ALTER COLUMN id SET DEFAULT nextval('public.teams_id_seq'::regclass);
+
+
+--
+-- TOC entry 4715 (class 2604 OID 58839)
+-- Name: tournaments tournament_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournaments ALTER COLUMN tournament_id SET DEFAULT nextval('public.tournaments_tournament_id_seq'::regclass);
+
+
+--
+-- TOC entry 4716 (class 2604 OID 58969)
+-- Name: tournaments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournaments ALTER COLUMN id SET DEFAULT nextval('public.tournaments_id_seq'::regclass);
+
+
+--
+-- TOC entry 4722 (class 2604 OID 58897)
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- TOC entry 4763 (class 2606 OID 58930)
+-- Name: action_logs action_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.action_logs
+    ADD CONSTRAINT action_logs_pkey PRIMARY KEY (log_id);
+
+
+--
+-- TOC entry 4765 (class 2606 OID 58938)
+-- Name: brackets brackets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brackets
+    ADD CONSTRAINT brackets_pkey PRIMARY KEY (bracket_id);
+
+
+--
+-- TOC entry 4769 (class 2606 OID 81934)
+-- Name: content content_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.content
+    ADD CONSTRAINT content_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4777 (class 2606 OID 122888)
+-- Name: games games_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.games
+    ADD CONSTRAINT games_name_key UNIQUE (name);
+
+
+--
+-- TOC entry 4779 (class 2606 OID 122886)
+-- Name: games games_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.games
+    ADD CONSTRAINT games_pkey PRIMARY KEY (game_id);
+
+
+--
+-- TOC entry 4771 (class 2606 OID 90177)
+-- Name: match_results match_results_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.match_results
+    ADD CONSTRAINT match_results_pkey PRIMARY KEY (match_id);
+
+
+--
+-- TOC entry 4753 (class 2606 OID 58850)
+-- Name: matches matches_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.matches
+    ADD CONSTRAINT matches_pkey PRIMARY KEY (match_id);
+
+
+--
+-- TOC entry 4743 (class 2606 OID 58834)
+-- Name: players players_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players
+    ADD CONSTRAINT players_email_key UNIQUE (email);
+
+
+--
+-- TOC entry 4745 (class 2606 OID 59028)
+-- Name: players players_id_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players
+    ADD CONSTRAINT players_id_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4755 (class 2606 OID 58858)
+-- Name: registrations registrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registrations
+    ADD CONSTRAINT registrations_pkey PRIMARY KEY (registration_id);
+
+
+--
+-- TOC entry 4775 (class 2606 OID 114704)
+-- Name: reward_requests reward_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reward_requests
+    ADD CONSTRAINT reward_requests_pkey PRIMARY KEY (request_id);
+
+
+--
+-- TOC entry 4773 (class 2606 OID 114696)
+-- Name: rewards rewards_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.rewards
+    ADD CONSTRAINT rewards_pkey PRIMARY KEY (reward_id);
+
+
+--
+-- TOC entry 4767 (class 2606 OID 65560)
+-- Name: team_players team_players_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_players
+    ADD CONSTRAINT team_players_pkey PRIMARY KEY (team_id, player_id);
+
+
+--
+-- TOC entry 4761 (class 2606 OID 65550)
+-- Name: teams teams_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.teams
+    ADD CONSTRAINT teams_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4749 (class 2606 OID 58971)
+-- Name: tournaments tournaments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournaments
+    ADD CONSTRAINT tournaments_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 4747 (class 2606 OID 81921)
+-- Name: players unique_player_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.players
+    ADD CONSTRAINT unique_player_id UNIQUE (player_id);
+
+
+--
+-- TOC entry 4751 (class 2606 OID 90166)
+-- Name: tournaments unique_tournament_id; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournaments
+    ADD CONSTRAINT unique_tournament_id UNIQUE (tournament_id);
+
+
+--
+-- TOC entry 4757 (class 2606 OID 58899)
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- TOC entry 4759 (class 2606 OID 58901)
+-- Name: users users_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_username_key UNIQUE (username);
+
+
+--
+-- TOC entry 4788 (class 2620 OID 58931)
+-- Name: players player_added_trigger; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER player_added_trigger AFTER INSERT ON public.players FOR EACH ROW EXECUTE FUNCTION public.log_new_player();
+
+
+--
+-- TOC entry 4789 (class 2620 OID 58892)
+-- Name: players trigger_log_new_player; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER trigger_log_new_player AFTER INSERT ON public.players FOR EACH ROW EXECUTE FUNCTION public.log_new_player();
+
+
+--
+-- TOC entry 4781 (class 2606 OID 58944)
+-- Name: brackets brackets_match_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brackets
+    ADD CONSTRAINT brackets_match_id_fkey FOREIGN KEY (match_id) REFERENCES public.matches(match_id);
+
+
+--
+-- TOC entry 4782 (class 2606 OID 58949)
+-- Name: brackets brackets_parent_match_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brackets
+    ADD CONSTRAINT brackets_parent_match_id_fkey FOREIGN KEY (parent_match_id) REFERENCES public.matches(match_id);
+
+
+--
+-- TOC entry 4785 (class 2606 OID 90178)
+-- Name: match_results match_results_tournament_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.match_results
+    ADD CONSTRAINT match_results_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(tournament_id);
+
+
+--
+-- TOC entry 4786 (class 2606 OID 114705)
+-- Name: reward_requests reward_requests_player_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reward_requests
+    ADD CONSTRAINT reward_requests_player_id_fkey FOREIGN KEY (player_id) REFERENCES public.players(player_id);
+
+
+--
+-- TOC entry 4787 (class 2606 OID 114710)
+-- Name: reward_requests reward_requests_reward_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.reward_requests
+    ADD CONSTRAINT reward_requests_reward_id_fkey FOREIGN KEY (reward_id) REFERENCES public.rewards(reward_id);
+
+
+--
+-- TOC entry 4783 (class 2606 OID 81922)
+-- Name: team_players team_players_player_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_players
+    ADD CONSTRAINT team_players_player_id_fkey FOREIGN KEY (player_id) REFERENCES public.players(player_id);
+
+
+--
+-- TOC entry 4784 (class 2606 OID 65561)
+-- Name: team_players team_players_team_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.team_players
+    ADD CONSTRAINT team_players_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 4780 (class 2606 OID 122889)
+-- Name: tournaments tournaments_game_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tournaments
+    ADD CONSTRAINT tournaments_game_id_fkey FOREIGN KEY (game_id) REFERENCES public.games(game_id);
+
+
+-- Completed on 2025-07-09 16:07:46
+
+--
+-- PostgreSQL database dump complete
+--
+

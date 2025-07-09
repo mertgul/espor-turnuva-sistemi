@@ -4,7 +4,7 @@ Bu projede, bir turnuva yönetimi sistemi ve takibi oluşturulması hedeflenmiş
  ## 1. Proje Amacı
 Bu proje, turnuva organizasyonu ve yönetimini kolaylaştırmayı ve e-spor takibini sağlamayı amaçlamaktadır. Sistem, kullanıcılarının turnuva oluşturma, takım oluşturma, takım yönetimi, maç yönetimi, hakemlik, adminlik ve sonuç takibi gibi işlevleri yerine getirmesine olanak sağlar.
 
-#£ 2. İşlevsellik
+# 2. İşlevsellik
 Projenin kapsamı aşağıdaki başlıklarda yer almaktadır:
 
 - Turnuva Oluşturma ve Yönetme

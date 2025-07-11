@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center my-5">Kullanıcıları Düzenle</h2>
+
+<!-- Kullanıcılar Tablosu -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Kullanıcı Adı</th>
+            <th>E-posta</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user[3] }}</td> <!-- Ad -->
+            <td>{{ user[1] }}</td> <!-- Kullanıcı Adı -->
+            <td>{{ user[2] }}</td> <!-- E-posta -->
+            <td>
+                <!-- Düzenle Butonu -->
+                <a href="{{ url_for('edit_user_details', user_id=user[0]) }}" class="btn btn-warning">Düzenle</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

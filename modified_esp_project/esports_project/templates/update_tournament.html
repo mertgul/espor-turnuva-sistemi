@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Turnuva Güncelleme</title>
+    <style>
+        /* Genel sayfa ayarları */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 40px;
+        }
+        /* Form konteyneri */
+        .container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+        /* Başlık */
+        h1 {
+            margin-bottom: 25px;
+            color: #333;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        /* Form elemanları */
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.95rem;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.8px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus {
+            border-color: #4a90e2;
+            outline: none;
+            box-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
+        }
+        /* Buton */
+        button {
+            margin-top: 20px;
+            width: 100%;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        /* Link */
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #4a90e2;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .back-link:hover {
+            color: #357ABD;
+            text-decoration: underline;
+        }
+
+        /* Responsive (mobil için) */
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px 25px;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Turnuva Güncelleme</h1>
+        <form method="POST" novalidate>
+            <label for="name">Turnuva Adı:</label>
+            <input type="text" id="name" name="name" value="{{ tournament.name }}" required />
+
+            <label for="game">Oyun Türü:</label>
+            <input type="text" id="game" name="game" value="{{ tournament.game }}" required />
+
+            <label for="prize">Ödül Miktarı:</label>
+            <input type="number" id="prize" name="prize" value="{{ tournament.prize }}" required />
+
+            <label for="max_teams">Max Takım Sayısı:</label>
+            <input type="number" id="max_teams" name="max_teams" value="{{ tournament.max_teams }}" required />
+
+            <label for="start_date">Başlangıç Tarihi:</label>
+            <input type="date" id="start_date" name="start_date" value="{{ tournament.start_date }}" required />
+
+            <button type="submit">Güncelle</button>
+        </form>
+
+        <a href="{{ url_for('index') }}" class="back-link">Ana Sayfaya Dön</a>
+    </div>
+</body>
+</html>

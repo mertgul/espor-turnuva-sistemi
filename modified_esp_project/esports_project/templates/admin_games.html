@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Oyun Yönetimi</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        th { background: #007bff; color: white; }
+        img { max-width: 100px; border-radius: 6px; }
+        button { margin: 2px; padding: 6px 12px; cursor: pointer; border-radius: 4px; border: none; }
+        .btn-edit { background-color: #28a745; color: white; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        .form-section { background: #f8f9fa; padding: 15px; border-radius: 8px; }
+        label { font-weight: 600; }
+        input[type=text] { width: 300px; padding: 6px; margin: 5px 0 15px; border-radius: 4px; border: 1px solid #ccc; }
+        input[type=submit] { background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+    <script>
+        function fillEditForm(id, name, image_url) {
+            document.getElementById('edit-game-id').value = id;
+            document.getElementById('edit-name').value = name;
+            document.getElementById('edit-image_url').value = image_url || ''; // Eğer resim yoksa boş string
+            window.scrollTo(0, document.body.scrollHeight); // Form görünür hale gelir
+        }
+
+        function clearEditForm() {
+            document.getElementById('edit-game-id').value = '';
+            document.getElementById('edit-name').value = '';
+            document.getElementById('edit-image_url').value = '';
+        }
+    </script>
+</head>
+<body>
+
+    
+    <h1>Oyun Yönetimi</h1>
+
+    <!-- Oyun Listesi -->
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Oyun Adı</th>
+                <th>Resim</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in games %}
+            <tr>
+                <td>{{ game[0] }}</td>
+                <td>{{ game[1] }}</td>
+                <td>
+                    {% if game[2] %}
+                        <img src="{{ game[2] }}" alt="{{ game[1] }}" />
+                    {% else %}
+                        Resim yok
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn-edit" 
+    onclick="fillEditForm('{{ game[0] }}', '{{ game[1] }}', '{{ game[2] or '' }}')">Düzenle</button>
+
+
+                    <!-- Silme Butonu -->
+                    <form style="display:inline;" method="POST" onsubmit="return confirm('Silmek istediğinizden emin misiniz?');">
+                        <input type="hidden" name="action" value="delete" />
+                        <input type="hidden" name="game_id" value="{{ game[0] }}" />
+                        <button type="submit" class="btn-delete">Sil</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">Henüz oyun yok.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Oyun Düzenleme Formu -->
+    <h2>Oyun Düzenle</h2>
+    <div class="form-section">
+        <form method="POST">
+            <input type="hidden" id="edit-game-id" name="game_id" />
+            <input type="hidden" name="action" value="edit" /> <!-- Oyun düzenleme işlemine göre form parametresi -->
+            <label for="edit-name">Oyun Adı:</label>
+            <input type="text" id="edit-name" name="name" />
+            <label for="edit-image_url">Resim URL:</label>
+            <input type="text" id="edit-image_url" name="image_url" />
+            <input type="submit" value="Güncelle" />
+            <button type="button" onclick="clearEditForm()">Temizle</button>
+        </form>
+    </div>
+
+    <h2>Yeni Oyun Ekle</h2>
+    <div class="form-section">
+        <form method="POST">
+            <input type="hidden" name="action" value="add" />
+            <label for="name">Oyun Adı:</label>
+            <input type="text" id="name" name="name" required />
+            <label for="image_url">Resim URL:</label>
+            <input type="text" id="image_url" name="image_url" />
+            <input type="submit" value="Ekle" />
+        </form>
+    </div> 
+    
+</body>
+</html>

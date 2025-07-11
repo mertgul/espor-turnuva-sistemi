@@ -1,0 +1,15 @@
+<h1>Live Scores for {{ tournament.name }}</h1>
+<table>
+    <tr>
+        <th>Team 1</th>
+        <th>Team 2</th>
+        <th>Score</th>
+    </tr>
+    {% for match in matches %}
+    <tr>
+        <td>{{ match.team1.name }}</td>
+        <td>{{ match.team2.name }}</td>
+        <td>{{ match.team1_score }} - {{ match.team2_score }}</td>
+    </tr>
+    {% endfor %}
+</table>

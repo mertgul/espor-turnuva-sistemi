@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Profili</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Profiliniz</h1>
+
+        <!-- Kullanıcı Bilgileri -->
+        <div class="mb-4">
+            <p><strong>Kullanıcı Adı:</strong> {{ user[0] }}</p>
+            <p><strong>Email:</strong> {{ user[1] }}</p>
+            <p><strong>Takım ID:</strong> {{ user[2] }}</p>
+        </div>
+
+        <!-- Profil Düzenleme ve Çıkış Linkleri -->
+        <div class="d-flex flex-column">
+            <a href="{{ url_for('update_profile') }}" class="btn btn-warning mb-2">Profilinizi Düzenleyin</a>
+            <a href="{{ url_for('update_team') }}" class="btn btn-warning mb-2">Takım Adınızı Düzenleyin</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger mb-2">Çıkış Yap</a>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Anasayfaya Git</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS ve Bağımlılıkları -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

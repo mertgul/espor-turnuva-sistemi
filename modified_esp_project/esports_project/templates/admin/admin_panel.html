@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Paneli</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Admin Paneline Hoş Geldiniz</h1>
+
+    <!-- Flash Mesajları -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Yeni Challonge Turnuvası Oluşturma -->
+    <h2>Yeni Challonge Turnuvası Oluştur</h2>
+    <form action="{{ url_for('main.create_challonge_tournament') }}" method="post">
+        <input type="text" name="tournament_name" placeholder="Turnuva Adı" required>
+        <button type="submit">Turnuva Oluştur</button>
+    </form>
+
+    <!-- Var Olan Turnuvalar -->
+    <h2>Mevcut Turnuvalar</h2>
+    <ul>
+        {% for tournament in tournaments %}
+            <li>
+                {{ tournament[1] }} |
+                <a href="{{ url_for('main.tournament_bracket', tournament_id=tournament[0]) }}">Bracket Görüntüle</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

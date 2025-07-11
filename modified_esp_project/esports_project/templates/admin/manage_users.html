@@ -1,0 +1,32 @@
+<!-- admin/manage_users.html -->
+{% extends "base.html" %}
+
+{% block title %}Kullanıcıları Yönet{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Kullanıcıları Yönet</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Kullanıcı Adı</th>
+            <th scope="col">E-posta</th>
+            <th scope="col">Yaş</th>
+            <th scope="col">Favori Oyun</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user[0] }}</td> <!-- player_id -->
+            <td>{{ user[1] }}</td> <!-- username -->
+            <td>{{ user[2] }}</td> <!-- email -->
+            <td>{{ user[3] }}</td> <!-- age -->
+            <td>{{ user[4] }}</td> <!-- favorite_game -->
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

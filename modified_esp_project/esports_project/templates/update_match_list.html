@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maç Güncelleme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f7fc;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            text-align: center;
+            padding: 12px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .action-buttons button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .action-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+        .card {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            background-color: white;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Maç Güncelleme</h1>
+            <h2>Tüm Maçlar</h2>
+
+            {% if matches %}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Round</th>
+                            <th>Takım 1</th>
+                            <th>Takım 2</th>
+                            <th>Durum</th>
+                            <th>Skorlar</th>
+                            <th>Aksiyon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for match in matches %}
+                            <tr>
+                                <td>{{ match[3] }}</td> <!-- Round -->
+                                <td>{{ match[7] }}</td> <!-- Takım 1 -->
+                                <td>{{ match[8] }}</td> <!-- Takım 2 -->
+                                <td>{{ match[4] }}</td> <!-- Durum -->
+                                <td>{{ match[5] }} - {{ match[6] }}</td> <!-- Skorlar -->
+                                <td>
+                                    <div class="action-buttons">
+                                        <!-- Güncelleme formu -->
+                                        <form action="{{ url_for('update_match') }}" method="POST" class="d-inline">
+                                            <input type="hidden" name="match_id" value="{{ match[0] }}">
+                                            <input type="number" name="team1_score" value="{{ match[5] }}" required class="form-control" style="width: 80px; display: inline;">
+                                            <input type="number" name="team2_score" value="{{ match[6] }}" required class="form-control" style="width: 80px; display: inline;">
+                                            <input type="text" name="status" value="{{ match[4] }}" required class="form-control" style="width: 120px; display: inline;">
+                                            <button type="submit" class="btn btn-primary">Güncelle</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Henüz maç bulunmamaktadır.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

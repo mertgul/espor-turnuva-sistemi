@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onaylı Sonuçlar</title>
+</head>
+<body>
+    <h1>Onaylı Maç Sonuçları</h1>
+    
+    {% if results %}
+        {% for result in results %}
+            <div>
+                <h3>Maç ID: {{ result.match_id }}</h3>  <!-- 'id' yerine 'match_id' kullanıldı -->
+                <p><strong>Takım 1:</strong> {{ result.team1_name }} | <strong>Skor:</strong> {{ result.score1 }}</p>
+                <p><strong>Takım 2:</strong> {{ result.team2_name }} | <strong>Skor:</strong> {{ result.score2 }}</p>
+
+                {% if result.objection_reason %}
+                    <p><strong>İtiraz Nedeni:</strong> {{ result.objection_reason }}</p>
+                {% endif %}
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Onaylı sonuç bulunamadı.</p>
+    {% endif %}
+</body>
+</html>

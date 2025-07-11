@@ -1,0 +1,7 @@
+<h1>Tüm Turnuvaları Yönet</h1>
+
+<ul>
+    {% for tournament in tournaments %}
+        <li><a href="{{ url_for('manage_participants', tournament_id=tournament[0]) }}">Katılımcıları Yönet ({{ tournament[1] }})</a></li>
+    {% endfor %}
+</ul>

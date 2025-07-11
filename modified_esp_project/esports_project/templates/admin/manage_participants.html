@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Katılımcıları Yönet{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Turnuva Katılımcıları - {{ tournament_id }}</h1>
+
+<h3>Mevcut Katılımcılar:</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Kullanıcı Adı</th>
+            <th scope="col">İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for participant in participants %}
+        <tr>
+            <td>{{ participant[0] }}</td>  <!-- player_id -->
+            <td>{{ participant[1] }}</td>  <!-- username -->
+            <td>
+                <form method="POST" action="{{ url_for('manage_participants', tournament_id=tournament_id) }}">
+                    <input type="hidden" name="player_id" value="{{ participant[0] }}">
+                    <button type="submit" name="action" value="remove" class="btn btn-danger btn-sm">Sil</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" class="text-center">Henüz katılımcı bulunmamaktadır.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Yeni Kullanıcılar:</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Kullanıcı Adı</th>
+            <th scope="col">İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in new_users %}
+        <tr>
+            <td>{{ user[0] }}</td>  <!-- player_id -->
+            <td>{{ user[1] }}</td>  <!-- username -->
+            <td>
+                <form method="POST" action="{{ url_for('manage_participants', tournament_id=tournament_id) }}">
+                    <input type="hidden" name="player_id" value="{{ user[0] }}">
+                    <button type="submit" name="action" value="add" class="btn btn-success btn-sm">Ekle</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="3" class="text-center">Yeni kullanıcı bulunmamaktadır.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

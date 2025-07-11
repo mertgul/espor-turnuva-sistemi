@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Takım Görüntüle{% endblock %}
+
+{% block content %}
+    <h1>Takım Bilgileri</h1>
+    {% if team %}
+        <p><strong>Takım Adı:</strong> {{ team.team_name }}</p>
+        <p><strong>Kurucu:</strong> {{ team.creator_name }}</p>
+        <p><strong>Kuruluş Tarihi:</strong> {{ team.created_at }}</p>
+
+        <h2>Oyuncular:</h2>
+        <ul>
+            {% for player in players %}
+                <li>{{ player.username }}</li>  <!-- player.name yerine player.username kullanılıyor -->
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Henüz bir takımınız yok.</p>
+    {% endif %}
+{% endblock %}

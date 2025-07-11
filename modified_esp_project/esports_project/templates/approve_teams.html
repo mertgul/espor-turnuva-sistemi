@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Takım Onayları{% endblock %}
+
+{% block content %}
+    <h1>Onay Bekleyen Takımlar</h1>
+
+    {% if pending_teams %}
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Takım Adı</th>
+                    <th>Ülke</th>
+                    <th>Onayla</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in pending_teams %}
+                    <tr>
+                        <td>{{ team[1] }}</td>
+                        <td>{{ team[2] }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('approve_team', team_id=team[0]) }}">
+                                <button type="submit" class="btn btn-success">Onayla</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Onay bekleyen takım bulunmamaktadır.</p>
+    {% endif %}
+{% endblock %}

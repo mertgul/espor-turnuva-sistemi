@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Maç Skoru Düzenle (ID: {{ match.match_id }})</h2>
+<form method="post">
+    <label>Takım 1 Skoru</label>
+    <input type="number" name="score1" value="{{ match.team1_score }}" required>
+    <label>Takım 2 Skoru</label>
+    <input type="number" name="score2" value="{{ match.team2_score }}" required>
+    <button type="submit">Güncelle</button>
+</form>
+<a href="{{ url_for('admin_dashboard') }}">← Geri</a>
+{% endblock %}

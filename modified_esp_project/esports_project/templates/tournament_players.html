@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turnuva Oyuncuları</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">Turnuvaya Kayıtlı Takımlar ve Oyuncuları</h1>
+
+        {% if players %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Katılımcılar</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for player in players %}
+                            <li class="list-group-item">
+                                Takım: {{ player[0] }} - Oyuncu: {{ player[1] or 'Henüz oyuncu yok' }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <p>Henüz katılımcı yok.</p>
+        {% endif %}
+
+        <div class="text-center mt-3">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Ana Sayfaya Dön</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

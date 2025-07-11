@@ -1,0 +1,24 @@
+<h1>Admin Onayı</h1>
+
+<form method="POST">
+    {% for result in results %}
+    <div>
+        <p>Turnuva ID: {{ result[1] }} | 
+        Takım 1: {{ result[2] }} | 
+        Takım 2: {{ result[3] }} | 
+        Skor: {{ result[4] }} - {{ result[5] }}</p>
+        
+        <!-- Takım 1 ve Takım 2 İsimleri -->
+        <p><strong>Takım 1 İsmi:</strong> {{ result[2] }}</p>
+        <p><strong>Takım 2 İsmi:</strong> {{ result[3] }}</p>
+
+        <input type="hidden" name="match_id" value="{{ result[0] }}">
+        
+        <label for="approve">Onayla:</label>
+        <input type="radio" name="approve" value="approve" required> Onayla
+        <input type="radio" name="approve" value="reject" required> Reddet
+        <br><br>
+    </div>
+    {% endfor %}
+    <input type="submit" value="Onayla">
+</form>

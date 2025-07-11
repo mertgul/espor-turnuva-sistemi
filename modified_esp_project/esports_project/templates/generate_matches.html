@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Maçları Oluştur{% endblock %}
+
+{% block content %}
+<h1>Maçlar</h1>
+<p>Bu turnuvaya ait maçları aşağıda görebilirsiniz.</p>
+
+{% if rounds %}
+    <div class="rounds">
+        {% for round_num, matches in rounds.items() %}
+            <h3>Tur {{ round_num }}</h3>
+            <ul>
+                {% for match in matches %}
+                    <li>
+                        <strong>{{ match['team1_name'] }} vs {{ match['team2_name'] }}</strong><br>
+                        Durum: {{ match['status'] }}<br>
+                        Skor: {{ match['team1_score'] }} - {{ match['team2_score'] }}<br>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Bu turnuva için henüz maçlar oluşturulmamış.</p>
+{% endif %}
+{% endblock %}

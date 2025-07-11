@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Oyun Ekle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            padding: 30px;
+            color: #333;
+        }
+        h1 {
+            margin-bottom: 25px;
+        }
+        form {
+            max-width: 400px;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            border: none;
+            padding: 12px 20px;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Oyun Ekle</h1>
+    <form method="POST" action="{{ url_for('add_game') }}">
+        <label for="name">Oyun Adı:</label>
+        <input type="text" id="name" name="name" placeholder="Örn: Valorant" required />
+
+        <label for="image_url">Resim URL:</label>
+        <input type="text" id="image_url" name="image_url" placeholder="https://example.com/game.png" />
+
+        <button type="submit">Ekle</button>
+    </form>
+
+    <a href="{{ url_for('index') }}">Ana Sayfaya Dön</a>
+</body>
+</html>

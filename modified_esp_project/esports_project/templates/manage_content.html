@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}İçerik Yönetimi{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">İçerik Yönetimi</h1>
+
+    <!-- İçerik Listeleme -->
+    <div class="mb-4">
+        <h3>Mevcut İçerikler</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Başlık</th>
+                    <th scope="col">Kategori</th>
+                    <th scope="col">Durum</th>
+                    <th scope="col">İşlem</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for content in contents %}
+                    <tr>
+                        <td>{{ content.title }}</td>
+                        <td>{{ content.category }}</td>
+                        <td>{{ content.status }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_content', content_id=content.id) }}" class="btn btn-warning btn-sm">Düzenle</a>
+                            <form method="POST" action="{{ url_for('delete_content', content_id=content.id) }}" style="display:inline;" onsubmit="return confirm('Bu içeriği silmek istediğinize emin misiniz?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Yeni İçerik Ekleme -->
+    <div class="mb-4">
+        <h3>Yeni İçerik Ekle</h3>
+        <form method="POST" action="{{ url_for('add_content') }}">
+            <div class="mb-3">
+                <label for="title" class="form-label">Başlık</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Kategori</label>
+                <input type="text" class="form-control" id="category" name="category" required>
+            </div>
+            <div class="mb-3">
+                <label for="status" class="form-label">Durum</label>
+                <select class="form-control" id="status" name="status" required>
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Pasif</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success">Ekle</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Takım Oluştur{% endblock %}
+
+{% block content %}
+<h1>Takım Oluştur</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="team_name">Takım Adı:</label>
+        <input type="text" id="team_name" name="team_name" class="form-control" required>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="country">Ülke:</label>
+        <input type="text" id="country" name="country" class="form-control" required>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="players">Oyuncuları Seç:</label>
+        <select multiple class="form-control" name="player_ids" id="players" required>
+            {% for player in players %}
+                <option value="{{ player[0] }}">{{ player[1] }}</option>  <!-- player[0]: player_id, player[1]: username -->
+            {% endfor %}
+        </select>
+        <small>En fazla 6 oyuncu seçebilirsiniz.</small>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Takım Oluştur</button>
+</form>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Yeni Maç Ekle{% endblock %}
+
+{% block content %}
+<h1>Yeni Maç Ekle</h1>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="tournament_id">Turnuva Seç</label>
+        <select id="tournament_id" name="tournament_id" class="form-control" required>
+            <option value="" disabled selected>Bir turnuva seçin</option>
+            {% for tournament in tournaments %}
+                <option value="{{ tournament[0] }}">{{ tournament[1] }}</option>  <!-- tournament[0]: ID, tournament[1]: Name -->
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="team1_id">Takım 1 Seç</label>
+        <select id="team1_id" name="team1_id" class="form-control" required>
+            <option value="" disabled selected>Bir takım seçin</option>
+            {% for team in teams %}
+                <option value="{{ team[0] }}">{{ team[1] }}</option>  <!-- team[0]: ID, team[1]: Team Name -->
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="team2_id">Takım 2 Seç</label>
+        <select id="team2_id" name="team2_id" class="form-control" required>
+            <option value="" disabled selected>Bir takım seçin</option>
+            {% for team in teams %}
+                <option value="{{ team[0] }}">{{ team[1] }}</option>  <!-- team[0]: ID, team[1]: Team Name -->
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="round_number">Tur Numarası</label>
+        <input type="number" id="round_number" name="round_number" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="match_date">Maç Tarihi</label>
+        <input type="date" id="match_date" name="match_date" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="status">Durum</label>
+        <input type="text" id="status" name="status" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Maç Ekle</button>
+</form>
+{% endblock %}

@@ -1,0 +1,9 @@
+<form method="POST">
+    <label for="player_id">Oyuncu Seç:</label>
+    <select name="player_id" id="player_id" required>
+        {% for player in available_players %}
+            <option value="{{ player[0] }}">{{ player[1] }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Oyuncuyu Takıma Ekle</button>
+</form>

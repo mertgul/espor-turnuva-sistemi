@@ -1,0 +1,23 @@
+<!-- templates/participants_list.html -->
+<form action="{{ url_for('participants') }}" method="get">
+    <label for="tournament_id">Turnuva Seçin:</label>
+    <select name="tournament_id" id="tournament_id" onchange="this.form.submit()">
+        <option value="">Bir Turnuva Seçin</option>
+        {% for tournament in tournaments %}
+            <option value="{{ tournament.tournament_id }}" {% if tournament.tournament_id == selected_tournament_id %}selected{% endif %}>
+                {{ tournament.name }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if participants %}
+    <h3>{{ selected_tournament_name }} Katılımcıları</h3>
+    <ul>
+        {% for participant in participants %}
+            <li>{{ participant.username }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Katılımcı bulunamadı.</p>
+{% endif %}

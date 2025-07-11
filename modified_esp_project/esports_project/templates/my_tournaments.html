@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Katıldığım Turnuvalar{% endblock %}
+
+{% block content %}
+<h1>Katıldığım Turnuvalar</h1>
+
+{% if tournaments %}
+    <div class="tournaments-list">
+        {% for tournament in tournaments %}
+            <div class="tournament-card">
+                <h3>{{ tournament[1] }}</h3>
+                <p><strong>Başlangıç Tarihi:</strong> {{ tournament[2] }}</p>
+                <p><strong>Maksimum Takım Sayısı:</strong> {{ tournament[3] }}</p>
+                <a href="{{ url_for('tournament_bracket', tournament_id=tournament[0]) }}" class="btn btn-info">Bracket Görüntüle</a>
+                <!-- Button to submit results -->
+                <a href="{{ url_for('submit_result', tournament_id=tournament[0]) }}" class="btn btn-success">Sonuçları Gönder</a>
+
+
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Henüz katıldığınız bir turnuva bulunmamaktadır.</p>
+{% endif %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+        color: #333;
+    }
+
+    h1 {
+        margin-top: 50px;
+        font-size: 36px;
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+    h2 {
+        font-size: 20px;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .tournaments-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 40px;
+    }
+
+    .tournament-card {
+        background-color: #fff;
+        border: 2px solid #007bff;
+        border-radius: 10px;
+        padding: 20px;
+        width: 250px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+
+    .tournament-card h3 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .tournament-card p {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .tournament-card .btn-info,
+    .tournament-card .btn-success {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .tournament-card .btn-info:hover,
+    .tournament-card .btn-success:hover {
+        background-color: #0056b3;
+    }
+
+    .tournament-card:hover {
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+
+    .no-matches {
+        font-size: 18px;
+        color: #f00;
+        margin-top: 30px;
+        font-weight: bold;
+    }
+
+    a {
+        display: inline-block;
+        margin-top: 30px;
+        font-size: 18px;
+        color: #007BFF;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: #eee;
+    }
+
+    a:hover {
+        background-color: #ddd;
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Ödül Taleplerini Yönet</h2>
+
+{% if pending_requests %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Oyuncu</th>
+                <th>Ödül</th>
+                <th>Talep Tarihi</th>
+                <th>Onayla</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in pending_requests %}
+                <tr>
+                    <td>{{ request['username'] }}</td>
+                    <td>{{ request['name'] }}</td>
+                    <td>{{ request['request_date'] }}</td>
+                    <td>
+                        <form action="{{ url_for('approve_reward', request_id=request['request_id']) }}" method="POST">
+                            <button type="submit" class="btn btn-success">Onayla</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Onaylanmayı bekleyen ödül talebi bulunmamaktadır.</p>
+{% endif %}
+{% endblock %}

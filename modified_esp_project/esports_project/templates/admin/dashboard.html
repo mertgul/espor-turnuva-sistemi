@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yönetici Paneli</title>
+
+    <!-- Bootstrap CSS Link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Özel CSS -->
+    <style>
+        /* Kart Tasarımı (Card Style) */
+        .custom-card, .custom-block {
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Hover efekti */
+        .custom-card:hover, .custom-block:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title, .block-title {
+            font-weight: bold;
+            font-size: 1.25rem;
+            color: #333;
+        }
+
+        .card-text, .block-text {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        .btn {
+            font-size: 0.9rem;  /* Buton font boyutunu küçültüyoruz */
+            padding: 0.5rem 1rem;  /* Butonun iç boşluğunu küçültüyoruz */
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .container {
+            padding-top: 30px;
+        }
+
+        /* Tek Blok Tasarımı */
+        .custom-block {
+            background-color: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .custom-block .btn {
+            font-size: 1rem;  /* Tek blokta buton font boyutunu biraz büyütebiliriz */
+            padding: 0.6rem 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Yönetici Panel Başlık -->
+        <h2 class="text-center my-5">Yönetici Paneli</h2>
+
+        <!-- Yönetici İşlemleri -->
+        <div class="row">
+            <!-- Katılımcıları Yönet -->
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Katılımcıları Yönet</h5>
+                        <p class="card-text">Turnuvaya katılan oyuncuları yönetebilirsiniz.</p>
+                        <a href="{{ url_for('tournament_list') }}" class="btn btn-primary">Yönet</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onay Bekleyen Takımlar -->
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Onay Bekleyen Takımlar</h5>
+                        <p class="card-text">Onay bekleyen takımları görebilirsiniz.</p>
+                        <a href="{{ url_for('approve_teams') }}" class="btn btn-warning">Onayla</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İçerik Yönetimi -->
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">İçerik Yönetimi</h5>
+                        <p class="card-text">Site içeriğini düzenleyebilirsiniz.</p>
+                        <a href="{{ url_for('manage_content') }}" class="btn btn-success">Yönet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diğer Kartlar -->
+        <div class="row">
+            <!-- Onay Bekleyen Skorlar -->
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Onay Bekleyen Skorlar</h5>
+                        <p class="card-text">Maç sonuçlarını onaylayabilirsiniz.</p>
+                        <a href="{{ url_for('approve_results') }}" class="btn btn-info">Onayla</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maç Ekle -->
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Maç Ekle</h5>
+                        <p class="card-text">Turnuvaya maç ekleyebilirsiniz.</p>
+                        <a href="{{ url_for('add_match') }}" class="btn btn-primary">Ekle</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maç Güncelleme -->
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Maç Güncelleme</h5>
+                        <p class="card-text">Mevcut maçları güncelleyebilirsiniz.</p>
+                        <a href="{{ url_for('update_match') }}" class="btn btn-danger">Güncelle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Onay Bekleyen Skorlar -->
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Kullanıcı İşlemleri</h5>
+                        <p class="card-text">Kullanıcıları Günceleyebilirsiniz.</p>
+                        <a href="{{ url_for('edit_user') }}" class="btn btn-info">Güncelle</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Ödül İstekleri</h5>
+                        <p class="card-text">Ödül İsteklerini Onaylayabilirsiniz.</p>
+                        <a href="{{ url_for('admin_rewards') }}" class="btn btn-primary">Onayla</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card custom-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Oyun Yönetimi</h5>
+                        <p class="card-text">Oyun Kategorisi Yönetimi.</p>
+                        <a href="{{ url_for('admin_games') }}" class="btn btn-primary">Onayla</a>
+                    </div>
+                </div>
+    </div>
+    
+
+    <!-- Bootstrap JS Link -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

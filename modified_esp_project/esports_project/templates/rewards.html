@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Ödüller</h2>
+
+<p><strong>Mevcut Puanınız: </strong>{{ player['puan'] }} Puan</p>
+
+{% if rewards %}
+    <div class="list-group">
+        {% for reward in rewards %}
+            <div class="list-group-item mb-3">
+                <h5>{{ reward['name'] }}</h5>
+                <p>{{ reward['description'] }}</p>
+                <p><strong>Fiyat: </strong>{{ reward['price'] }} Puan</p>
+                <form method="POST">
+                    <input type="hidden" name="reward_id" value="{{ reward['reward_id'] }}">
+                    <input type="hidden" name="reward_price" value="{{ reward['price'] }}">
+                    <button type="submit" class="btn btn-primary btn-block">Ödülü Talep Et</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Henüz ödül bulunmamaktadır.</p>
+{% endif %}
+
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary mt-3">Admin Paneline Geri Dön</a>
+{% endblock %}

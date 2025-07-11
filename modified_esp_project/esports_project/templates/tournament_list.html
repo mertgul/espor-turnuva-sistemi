@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center my-5">Turnuva Listesi</h2>
+
+<!-- Turnuva Tablosu -->
+<div class="container">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Turnuva Adı</th>
+                <th>İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tournament in tournaments %}
+            <tr>
+                <td>{{ tournament[1] if tournament[1] else 'Turnuva Adı Yok' }}</td> <!-- Turnuva Adı -->
+                <td>
+                    <!-- Katılımcıları Yönet Butonu -->
+                    <a href="{{ url_for('manage_participants', tournament_id=tournament[0]) }}" class="btn btn-primary btn-sm">Katılımcıları Yönet</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

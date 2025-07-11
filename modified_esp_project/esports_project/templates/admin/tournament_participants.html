@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="text-center my-5">Katılımcıları Yönet - Turnuva: {{ tournament_id }}</h2>
+
+<!-- Katılımcılar Tablosu -->
+<h3>Mevcut Katılımcılar</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for participant in participants %}
+        <tr>
+            <td>{{ participant[1] }}</td> <!-- Kullanıcı Adı -->
+            <td>
+                <!-- Katılımcıyı Çıkarma Butonu -->
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="action" value="remove">
+                    <input type="hidden" name="player_id" value="{{ participant[0] }}">
+                    <button type="submit" class="btn btn-danger">Sil</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Yeni Katılımcılar</h3>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>İşlem</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in new_users %}
+        <tr>
+            <td>{{ user[1] }}</td> <!-- Kullanıcı Adı -->
+            <td>
+                <!-- Katılımcıyı Ekleme Butonu -->
+                <form method="POST" style="display:inline;">
+                    <input type="hidden" name="action" value="add">
+                    <input type="hidden" name="player_id" value="{{ user[0] }}">
+                    <button type="submit" class="btn btn-success">Ekle</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Yeni Ödül Ekle</h2>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="name">Ödül Adı</label>
+        <input type="text" id="name" name="name" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Ödül Açıklaması</label>
+        <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="price">Fiyat (Puan)</label>
+        <input type="number" id="price" name="price" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-success">Ödül Ekle</button>
+</form>
+
+<a href="{{ url_for('admin_rewards') }}" class="btn btn-secondary mt-3">Geri Dön</a>
+{% endblock %}

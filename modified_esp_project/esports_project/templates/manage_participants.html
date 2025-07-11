@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Turnuva Katılımcıları (ID: {{ tournament_id }})</h2>
+<table>
+    <tr>
+        <th>Kullanıcı Adı</th>
+        <th>İşlem</th>
+    </tr>
+    {% for participant in participants %}
+    <tr>
+        <td>{{ participant.username }}</td>
+        <td>
+            <form method="post">
+                <input type="hidden" name="player_id" value="{{ participant.player_id }}">
+                <input type="hidden" name="action" value="remove">
+                <button type="submit">Kaldır</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{{ url_for('admin_dashboard') }}">← Geri</a>
+{% endblock %}

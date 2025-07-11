@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonuç Gönder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
+        }
+        input[type="text"], input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #004aad;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #003b8c;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Sonuç Gönder</h1>
+
+        <form method="POST">
+            <input type="hidden" name="tournament_id" value="{{ tournament_id }}">
+
+            <label for="team1_name">Takım 1 Adı:</label>
+            <input type="text" name="team1_name" id="team1_name" required>
+
+            <label for="score1">Takım 1 Skoru:</label>
+            <input type="number" name="score1" id="score1" required>
+
+            <label for="team2_name">Takım 2 Adı:</label>
+            <input type="text" name="team2_name" id="team2_name" required>
+
+            <label for="score2">Takım 2 Skoru:</label>
+            <input type="number" name="score2" id="score2" required>
+
+            <label for="objection_reason">İtiraz Nedeni:</label>
+            <textarea name="objection_reason" id="objection_reason" required></textarea>
+
+            <input type="submit" value="Sonuçları Gönder">
+        </form>
+    </div>
+
+</body>
+</html>
